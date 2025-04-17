@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
-# from app.api import api
+# from api import prs
 
 
 router = APIRouter(
@@ -10,6 +10,7 @@ router = APIRouter(
     responses={
         404: {"description": "Not found"},
         400: {"description": "Bad request"},
+        401: {"description": "Bad credentials"},
     },
 )
 

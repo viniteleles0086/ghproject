@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.routers import repos, prs
+from routers import repos, prs
 
 
 app = FastAPI()

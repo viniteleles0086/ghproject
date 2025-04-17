@@ -1,6 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Response
+from fastapi.responses import JSONResponse
 
-# from app.api import api
+from api import repos
+
+from schemas.repo import Repo
 
 
 router = APIRouter(
@@ -9,6 +12,8 @@ router = APIRouter(
     responses={
         404: {"description": "Not found"},
         400: {"description": "Bad request"},
+        401: {"description": "Bad credentials"},
+        422: {"description": "Unprocessable Entity"},
     },
 )
 
@@ -19,22 +24,25 @@ async def list_repos():
     List github repositories
     """
 
-    return [{"repo": "ex"}]
+    status_code, repos_ = repos.list()
+    return JSONResponse(status_code=status_code, content=repos_,)
 
 
 @router.post("/")
-async def create_repo():
+async def create_repo(repo: Repo):
     """
     Create github repository
     """
 
-    return {"repo": "ex"}
+    status_code = repos.create(repo)
+    return JSONResponse(status_code=status_code, content=None,)
 
 
-@router.delete("/{repo_id}")
-async def delete_repo(repo_id: str):
+@router.delete("/{owner}/{repo}")
+async def delete_repo(owner: str, repo: str):
     """
     Delete github repository
     """
 
-    return {"repo": repo_id}
+    status_code = repos.delete(owner, repo)
+    return Response(status_code=status_code,)
